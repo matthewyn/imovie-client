@@ -232,7 +232,7 @@ function MovieDetail() {
             ) : (
               <div className="flex mt-4 gap-6">
                 <Image
-                  src={generateApiOrigin(movieDetail.filePath)}
+                  src={movieDetail.filePath}
                   width={250}
                   alt={movieDetail.judul}
                   className="col"
