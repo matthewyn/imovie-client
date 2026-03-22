@@ -208,7 +208,7 @@ function Orders() {
                   <div className="flex mt-4 gap-3">
                     <Image
                       alt="Movie Poster"
-                      src={generateApiOrigin(order.filePath)}
+                      src={order.filePath}
                       width={100}
                     />
                     <div className="flex-1">

@@ -67,7 +67,7 @@ function Wishlist() {
                 <Image
                   alt="Movie image"
                   className="object-cover rounded-xl"
-                  src={generateApiOrigin(movie.filePath)}
+                  src={movie.filePath}
                   width={270}
                 />
               </CardHeader>
