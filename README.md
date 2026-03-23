@@ -1,4 +1,4 @@
-# iMovie - Movie Booking Application
+# 🎬 iMovie - Movie Booking Application
 
 A modern, feature-rich movie ticket booking application built with React and Vite. iMovie allows users to browse movies, book tickets, manage orders, and create wishlists.
 
@@ -123,8 +123,6 @@ The API origin is dynamically generated based on environment:
 - [ ] Advanced movie search and filtering
 - [ ] Movie recommendations based on viewing history
 - [ ] Email notifications for order status updates
-- [ ] Mobile app (React Native)
-- [ ] Dark mode toggle
 - [ ] Multiple language support (i18n)
 
 ### Features
@@ -133,42 +131,17 @@ The API origin is dynamically generated based on environment:
 - [ ] Movie reviews and ratings system
 - [ ] Group booking discounts
 - [ ] Gift card functionality
-- [ ] Referral rewards program
 - [ ] Social sharing integration
 - [ ] Push notifications
-- [ ] Offline mode support
 
 ### Payment & Security
 
 - [ ] Multiple payment gateway integration (Stripe, PayPal)
 - [ ] E-ticket generation and download
-- [ ] Barcode/QR code for tickets
-- [ ] Two-factor authentication (2FA)
-- [ ] Session management improvements
-- [ ] Payment history and receipts
 
 ### Admin Features
 
 - [ ] Advanced analytics dashboard
-- [ ] Real-time booking analytics
 - [ ] Revenue reports
 - [ ] Customer management system
 - [ ] Promotional campaigns management
-- [ ] Staff/employee management
-
-### Performance & Infrastructure
-
-- [ ] Image optimization and lazy loading
-- [ ] Progressive Web App (PWA) features
-- [ ] Service worker for offline support
-- [ ] Code splitting and route-based lazy loading
-- [ ] CDN integration for static assets
-- [ ] Caching strategies optimization
-
-### Testing
-
-- [ ] Unit tests (Vitest)
-- [ ] Integration tests
-- [ ] E2E tests (Cypress/Playwright)
-- [ ] Performance testing
-- [ ] Accessibility testing
