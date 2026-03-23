@@ -230,7 +230,7 @@ function Orders() {
             );
           })
         ) : (
-          <p className="text-gray-500">Anda belum memiliki pesanan.</p>
+          <p className="text-gray-500">You don't have any orders yet.</p>
         )}
       </div>
       {orders && orders.length > 0 && (

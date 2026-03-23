@@ -41,7 +41,7 @@ function Wishlist() {
       <Breadcrumbs>
         <BreadcrumbItem>Home</BreadcrumbItem>
         <BreadcrumbItem>Account</BreadcrumbItem>
-        <BreadcrumbItem>Wishlist</BreadcrumbItem>
+        <BreadcrumbItem>Wishlists</BreadcrumbItem>
       </Breadcrumbs>
       {isLoading ? (
         <div className="grid grid-cols-5 gap-4 mt-4">
@@ -79,7 +79,7 @@ function Wishlist() {
           ))}
         </div>
       ) : (
-        <p className="mt-4">Anda belum memiliki film yang masuk Wishlist.</p>
+        <p className="mt-4">You don't have any movies in your Wishlist.</p>
       )}
     </div>
   );

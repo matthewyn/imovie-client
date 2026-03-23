@@ -8,7 +8,7 @@ import {
   HiMiniUser,
 } from "react-icons/hi2";
 import { generateApiOrigin } from "../utils/apiOrigin";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 export const EyeSlashFilledIcon = (props) => {
@@ -78,6 +78,7 @@ function SignUpCard() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -85,6 +86,7 @@ function SignUpCard() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
 
       const formData = new FormData();
       formData.append("username", username);
@@ -98,8 +100,9 @@ function SignUpCard() {
       });
 
       if (response.status === 201) {
-        toast.success("Akun berhasil dibuat! Silakan login.");
+        toast.success("Account created successfully! Please log in.");
         navigate("/login");
+        return;
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -110,6 +113,8 @@ function SignUpCard() {
         console.error("Server error:", error.response?.data);
         console.error("Status code:", error.response?.status);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -124,10 +129,10 @@ function SignUpCard() {
             <HiArrowRightEndOnRectangle size={20} />
           </Button>
           <h1 className="font-semibold text-2xl text-center mt-2">
-            Buat akun Anda
+            Create Your Account
           </h1>
           <p className="text-gray-500 text-center mt-1">
-            Mulai memesan tiket film dan reservasi tempat duduk favorit Anda.
+            Start booking movie tickets and reserve your favorite seats.
           </p>
           <form className="flex flex-col gap-3 mt-5" onSubmit={handleSubmit}>
             <div>
@@ -185,9 +190,15 @@ function SignUpCard() {
                 minLength={6}
               />
             </div>
-            <Button color="secondary" type="submit">
-              Mulai Booking
+            <Button color="secondary" type="submit" isLoading={isLoading}>
+              Start Booking
             </Button>
+            <p>
+              Have an account?{" "}
+              <Link className="text-sm text-indigo-500" to="/login">
+                Sign in
+              </Link>
+            </p>
           </form>
         </CardBody>
       </Card>

@@ -23,10 +23,12 @@ function Schedules() {
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [kategoriStudio, setKategoriStudio] = useState("");
   const [kategoriMovie, setKategoriMovie] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
 
       const formData = new FormData();
       formData.append("kategoriStudio", kategoriStudio);
@@ -41,13 +43,15 @@ function Schedules() {
       });
 
       if (response.status === 201) {
-        toast.success("Jadwal berhasil dibuat!");
+        toast.success("Schedule successfully created!");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Server error:", error.response?.data);
         console.error("Status code:", error.response?.status);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -84,8 +88,8 @@ function Schedules() {
           <Select
             isRequired
             className="max-w-xs"
-            label="Judul Film"
-            placeholder="Pilih judul film"
+            label="Movie Title"
+            placeholder="Select movie title"
             labelPlacement="outside-top"
             selectedKeys={kategoriMovie ? [kategoriMovie] : []}
             onSelectionChange={(e) => setKategoriMovie(Array.from(e)[0])}
@@ -99,14 +103,14 @@ function Schedules() {
           <DatePicker
             isRequired
             className="max-w-71"
-            label="Tanggal"
+            label="Date"
             value={tanggal}
             labelPlacement="outside-top"
             onChange={setTanggal}
           />
           <TimeInput
             isRequired
-            label="Jam"
+            label="Time"
             value={waktu}
             labelPlacement="outside-top"
             onChange={setWaktu}
@@ -116,8 +120,8 @@ function Schedules() {
           <Select
             isRequired
             className="max-w-xs"
-            label="Kategori Studio"
-            placeholder="Pilih kategori studio"
+            label="Studio Category"
+            placeholder="Select studio category"
             labelPlacement="outside-top"
             selectedKeys={kategoriStudio ? [kategoriStudio] : []}
             onSelectionChange={(e) => setKategoriStudio(Array.from(e)[0])}
@@ -127,8 +131,8 @@ function Schedules() {
             ))}
           </Select>
         </div>
-        <Button color="primary" type="submit">
-          Kirim
+        <Button color="primary" type="submit" isLoading={isLoading}>
+          Submit
         </Button>
       </form>
     </div>

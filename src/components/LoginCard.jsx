@@ -79,6 +79,7 @@ function LoginCard() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { fetchUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -86,6 +87,7 @@ function LoginCard() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
 
       const formData = new FormData();
       formData.append("email", email);
@@ -99,9 +101,10 @@ function LoginCard() {
       });
 
       if (response.status === 200) {
-        toast.success("Login berhasil! Selamat datang kembali.");
+        toast.success("Login successful! Welcome back.");
         navigate("/");
         await fetchUser();
+        return;
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -112,6 +115,8 @@ function LoginCard() {
         console.error("Server error:", error.response?.data);
         console.error("Status code:", error.response?.status);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,11 +131,11 @@ function LoginCard() {
             <HiArrowRightEndOnRectangle size={20} />
           </Button>
           <h1 className="font-semibold text-2xl text-center mt-2">
-            Selamat Datang kembali
+            Welcome Back
           </h1>
           <p className="text-gray-500 text-center mt-1">
-            Masuk untuk memesan tiket, menjelajahi film, dan mengelola reservasi
-            Anda.
+            Sign in to book tickets, explore movies, and manage your
+            reservations.
           </p>
           <form className="flex flex-col gap-3 mt-5" onSubmit={handleSubmit}>
             <div>
@@ -178,10 +183,10 @@ function LoginCard() {
               className="text-right text-gray-500 text-sm"
               to="/forgotpassword"
             >
-              Lupa password?
+              Forgot password?
             </Link>
-            <Button color="secondary" type="submit">
-              Mulai Booking
+            <Button color="secondary" type="submit" isLoading={isLoading}>
+              Start Booking
             </Button>
           </form>
         </CardBody>

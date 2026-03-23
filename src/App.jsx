@@ -2,9 +2,17 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 import { generateApiOrigin } from "./utils/apiOrigin";
-import { Card, CardHeader, CardBody, Image, Skeleton } from "@heroui/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Image,
+  Skeleton,
+  Button,
+} from "@heroui/react";
 import { Link } from "react-router-dom";
 import ReactPlayer from "react-player";
+import { HiTicket } from "react-icons/hi2";
 
 function StarRating({ count }) {
   return (
@@ -185,10 +193,10 @@ function Home() {
                         {slide ? slide.judul : "Loading..."}
                       </h2>
                       <p className="text-sm mt-1">
-                        <span className="text-gray-400">Durasi: </span>
+                        <span className="text-gray-400">Duration: </span>
                         <span className="text-emerald-400 font-bold">
                           {slide
-                            ? `${Math.floor(slide.durasi / 60)} jam ${slide.durasi % 60} menit`
+                            ? `${Math.floor(slide.durasi / 60)} hour ${slide.durasi % 60} minute`
                             : "Loading..."}
                         </span>
                       </p>
@@ -197,36 +205,14 @@ function Home() {
 
                   {/* Buttons */}
                   <div className="flex gap-3 mt-1">
-                    <button className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 transition-colors text-white font-bold px-5 py-2.5 rounded-xl text-sm flex-1 justify-center">
-                      <svg
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      Watch &amp; Order
-                    </button>
-                    <button className="flex items-center gap-2 border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 transition-all text-white font-bold px-5 py-2.5 rounded-xl text-sm">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
-                      Add to Favorite
-                    </button>
+                    <Button
+                      className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 transition-colors text-white font-bold px-5 py-2.5 rounded-xl text-sm flex-1 justify-center"
+                      as={Link}
+                      to={slide ? `/movie/${slide.id}` : "#"}
+                    >
+                      <HiTicket size={20} />
+                      Buy Tickets
+                    </Button>
                   </div>
                 </div>
               </>
@@ -252,7 +238,7 @@ function Home() {
       </div>
       <section className="mt-10">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-bold text-4xl">Now Showing</h2>
+          <h2 className="font-bold text-4xl">Now Playing</h2>
           <div className="grid grid-cols-4 gap-4 mt-2">
             {isLoading ? (
               Array(4)

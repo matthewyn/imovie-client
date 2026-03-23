@@ -32,10 +32,12 @@ const urlFetch = generateApiOrigin("/api/studios");
 function Studio() {
   const [nama, setNama] = useState("");
   const [kategoriKapasitas, setKategoriKapasitas] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
 
       const selectedKapasitas = kapasitasCategory.find(
         (k) => JSON.stringify(k.seats) === kategoriKapasitas,
@@ -48,13 +50,15 @@ function Studio() {
       });
 
       if (response.status === 201) {
-        toast.success("Studio berhasil dibuat!");
+        toast.success("Studio successfully created!");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Server error:", error.response?.data);
         console.error("Status code:", error.response?.status);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -70,9 +74,9 @@ function Studio() {
           <Input
             isRequired
             className="max-w-xs"
-            label="Nama"
+            label="Name"
             type="text"
-            placeholder="Masukkan nama dari studio"
+            placeholder="Enter the studio name"
             value={nama}
             labelPlacement="outside-top"
             onChange={(e) => setNama(e.target.value)}
@@ -82,8 +86,8 @@ function Studio() {
           <Select
             isRequired
             className="max-w-xs"
-            label="Kategori Kapasitas"
-            placeholder="Pilih kategori kapasitas"
+            label="Capacity Category"
+            placeholder="Select capacity category"
             labelPlacement="outside-top"
             selectedKeys={kategoriKapasitas ? [kategoriKapasitas] : []}
             onSelectionChange={(e) => setKategoriKapasitas(Array.from(e)[0])}
@@ -95,8 +99,8 @@ function Studio() {
             ))}
           </Select>
         </div>
-        <Button color="primary" type="submit">
-          Kirim
+        <Button color="primary" type="submit" isLoading={isLoading}>
+          Submit
         </Button>
       </form>
     </div>

@@ -134,7 +134,7 @@ function OrderDetail() {
       );
 
       if (response.status === 201) {
-        toast.success("Pembayaran berhasil dikonfirmasi!");
+        toast.success("Payment successfully confirmed!");
         fetchOrderDetail();
       }
     } catch (error) {
@@ -221,11 +221,11 @@ function OrderDetail() {
               <>
                 <div className="flex justify-between">
                   <h3 className="font-semibold text-black/80 text-lg">
-                    Barang yang dipesan
+                    Items Ordered
                   </h3>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-400 text-sm">
-                      {1 + orderDetail.snacks.length} barang
+                      {1 + orderDetail.snacks.length} item(s)
                     </span>
                     <button>
                       {isVisible ? (
@@ -252,9 +252,9 @@ function OrderDetail() {
                         className="text-indigo-500 bg-white border border-gray-400/30 p-1 rounded-lg"
                       />
                       <div className="flex-1">
-                        <h4 className="font-semibold">Tiket bioskop</h4>
+                        <h4 className="font-semibold">Cinema Ticket</h4>
                         <p>
-                          Kursi:{" "}
+                          Seats:{" "}
                           {orderDetail ? orderDetail.seats.join(", ") : "N/A"}
                         </p>
                       </div>
@@ -347,11 +347,9 @@ function OrderDetail() {
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-semibold">
-                      Pesanan Dibatalkan
-                    </h2>
+                    <h2 className="text-lg font-semibold">Order Cancelled</h2>
                     <p className="text-sm text-gray-400">
-                      Pesanan Anda telah dibatalkan
+                      Your order has been cancelled
                     </p>
                   </div>
                 </div>
@@ -366,11 +364,11 @@ function OrderDetail() {
                     as={Link}
                     to={`/movie/${orderDetail.idMovie}`}
                   >
-                    Buat Pesanan Baru
+                    Create New Order
                   </Button>
 
                   <button className="border border-white/20 px-4 py-2 rounded-full text-sm hover:bg-white/10 transition">
-                    Kontak Support
+                    Contact Support
                   </button>
                 </div>
               </>
@@ -379,11 +377,11 @@ function OrderDetail() {
                 {/* Header */}
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-lg font-semibold">
-                    🍿 Jadikan film Anda lebih baik
+                    🍿 Make your movie better
                   </h2>
 
                   <span className="text-sm text-gray-300">
-                    Tambahkan camilan & merchandise
+                    Add snacks & merchandise
                   </span>
                 </div>
 
@@ -446,7 +444,7 @@ function OrderDetail() {
                           className="bg-lime-400 text-black px-4 py-2 rounded-full text-sm font-semibold hover:scale-105 transition"
                           onClick={() => item.setQuantityState(1)}
                         >
-                          Tambah
+                          Add
                         </button>
                       )}
                     </div>
@@ -462,9 +460,9 @@ function OrderDetail() {
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-semibold">Pesanan Selesai</h2>
+                    <h2 className="text-lg font-semibold">Order Complete</h2>
                     <p className="text-sm text-gray-400">
-                      Kamu sudah siap untuk pertunjukannya
+                      You're all set for the show
                     </p>
                   </div>
                 </div>
@@ -475,23 +473,23 @@ function OrderDetail() {
                 {/* Info */}
                 <div className="space-y-2 text-sm text-gray-300">
                   <div className="flex items-center">
-                    <Image src={PopcornImage} width={32} /> Pemesanan makanan
-                    ringan kini ditutup.
+                    <Image src={PopcornImage} width={32} /> Snack ordering is
+                    now closed.
                   </div>
                   <div className="flex items-center">
-                    <Image src={TicketImage} width={32} /> Harap tiba 15 menit
-                    sebelum pertunjukan dimulai.
+                    <Image src={TicketImage} width={32} /> Please arrive 15
+                    minutes before the show starts.
                   </div>
                 </div>
 
                 {/* Actions */}
                 <div className="flex gap-3 mt-5">
                   <button className="bg-lime-400 text-black px-4 py-2 rounded-full text-sm font-semibold hover:scale-105 transition">
-                    Lihat Tiket
+                    View Ticket
                   </button>
 
                   <button className="border border-white/20 px-4 py-2 rounded-full text-sm hover:bg-white/10 transition">
-                    Kontak Support
+                    Contact Support
                   </button>
                 </div>
               </>
@@ -522,9 +520,9 @@ function OrderDetail() {
               </>
             ) : (
               <>
-                <h3 className="font-semibold">Ringkasan</h3>
+                <h3 className="font-semibold">Summary</h3>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Jumlah pesanan</span>
+                  <span className="text-gray-500">Order Amount</span>
                   <span>
                     Rp{" "}
                     {orderDetail
@@ -551,7 +549,7 @@ function OrderDetail() {
                 </div>
                 <Divider />
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Jumlah total</span>
+                  <span className="text-gray-500">Total Amount</span>
                   <span>
                     Rp{" "}
                     {orderDetail
@@ -568,7 +566,7 @@ function OrderDetail() {
                 </div>
                 {isNotConfirmed && (
                   <Button color="secondary" onClick={handleCompletePayment}>
-                    Selesaikan pembayaran
+                    Complete Payment
                   </Button>
                 )}
               </>
@@ -597,7 +595,7 @@ function OrderDetail() {
               </>
             ) : (
               <>
-                <h3 className="font-semibold">Status order</h3>
+                <h3 className="font-semibold">Order Status</h3>
                 <div className="space-y-4">
                   {steps.map((step, i) => (
                     <div key={i} className="flex gap-3 items-start">
@@ -652,7 +650,7 @@ function OrderDetail() {
                 </>
               ) : (
                 <>
-                  <h3 className="font-semibold">Selesaikan Pembayaran dalam</h3>
+                  <h3 className="font-semibold">Complete Payment in</h3>
                   <div className="flex items-center gap-2 justify-center">
                     <div className="text-3xl font-bold text-indigo-600">
                       {Math.floor(timeRemaining.hours)}h{" "}
@@ -661,7 +659,7 @@ function OrderDetail() {
                     </div>
                   </div>
                   <p className="text-sm text-gray-500">
-                    Selesaikan pembayaran sebelum batas waktu berakhir
+                    Complete payment before the deadline
                   </p>
                 </>
               )}

@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { generateApiOrigin } from "../utils/apiOrigin";
+import toast from "react-hot-toast";
 
 export const AcmeLogo = () => {
   return (
@@ -45,7 +46,9 @@ export default function CustomNavbar() {
       );
       if (result.status === 200) {
         setUser(null);
+        toast.success("Logout berhasil! Sampai jumpa lagi.");
         navigate("/login");
+        return;
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

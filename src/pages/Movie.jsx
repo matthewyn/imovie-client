@@ -60,10 +60,12 @@ function Movie() {
   const [jam, setJam] = useState("");
   const [menit, setMenit] = useState("");
   const [video, setVideo] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
 
       const formData = new FormData();
       formData.append("judul", judul);
@@ -83,13 +85,15 @@ function Movie() {
       });
 
       if (response.status === 201) {
-        toast.success("Film berhasil dibuat!");
+        toast.success("Movie successfully created!");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Server error:", error.response?.data);
         console.error("Status code:", error.response?.status);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -120,9 +124,9 @@ function Movie() {
           <Input
             isRequired
             className="max-w-xs"
-            label="Judul"
+            label="Title"
             type="text"
-            placeholder="Masukkan judul dari film"
+            placeholder="Enter the movie title"
             value={judul}
             labelPlacement="outside-top"
             onChange={(e) => setJudul(e.target.value)}
@@ -133,7 +137,7 @@ function Movie() {
             isRequired
             className="max-w-xs"
             label="Video URL"
-            placeholder="Masukkan URL video dari film"
+            placeholder="Enter the movie video URL"
             labelPlacement="outside-top"
             type="text"
             value={video}
@@ -145,7 +149,7 @@ function Movie() {
             isRequired
             className="max-w-xs"
             label="Poster"
-            placeholder="Masukkan file poster dari film"
+            placeholder="Enter the movie poster file"
             labelPlacement="outside-top"
             type="file"
             onChange={(e) => setFile(e.target.files[0])}
@@ -155,8 +159,8 @@ function Movie() {
           <Select
             isRequired
             className="max-w-xs"
-            label="Kategori Umur"
-            placeholder="Pilih kategori umur"
+            label="Age Category"
+            placeholder="Select age category"
             labelPlacement="outside-top"
             selectedKeys={kategoriUmur ? [kategoriUmur] : []}
             onSelectionChange={(e) => setKategoriUmur(Array.from(e)[0])}
@@ -169,8 +173,8 @@ function Movie() {
         <div>
           <Textarea
             isRequired
-            label="Sinopsis"
-            placeholder="Masukkan sinopsis dari film"
+            label="Synopsis"
+            placeholder="Enter the movie synopsis"
             labelPlacement="outside-top"
             value={sinopsis}
             onChange={(e) => setSinopsis(e.target.value)}
@@ -180,8 +184,8 @@ function Movie() {
           <Select
             isRequired
             className="max-w-xs"
-            label="Kategori Genre"
-            placeholder="Pilih kategori genre"
+            label="Genre Category"
+            placeholder="Select genre category"
             labelPlacement="outside-top"
             selectedKeys={kategoriGenre ? [kategoriGenre] : []}
             onSelectionChange={(e) => setKategoriGenre(Array.from(e)[0])}
@@ -195,8 +199,8 @@ function Movie() {
           <Select
             isRequired
             className="max-w-xs"
-            label="Pilih Jam"
-            placeholder="Pilih durasi dalam jam"
+            label="Select Hours"
+            placeholder="Select duration in hours"
             labelPlacement="outside-top"
             selectedKeys={jam ? [jam] : []}
             onSelectionChange={(e) => setJam(Array.from(e)[0])}
@@ -210,8 +214,8 @@ function Movie() {
           <Select
             isRequired
             className="max-w-xs"
-            label="Pilih Menit"
-            placeholder="Pilih durasi dalam menit"
+            label="Select Minutes"
+            placeholder="Select duration in minutes"
             selectedKeys={menit ? [menit] : []}
             labelPlacement="outside-top"
             onSelectionChange={(e) => setMenit(Array.from(e)[0])}
@@ -225,8 +229,8 @@ function Movie() {
           <Select
             isRequired
             className="max-w-xs"
-            label="Kategori Runtime"
-            placeholder="Pilih kategori runtime"
+            label="Runtime Category"
+            placeholder="Select runtime category"
             labelPlacement="outside-top"
             selectedKeys={kategoriRuntime ? [kategoriRuntime] : []}
             onSelectionChange={(e) => setKategoriRuntime(Array.from(e)[0])}
@@ -236,8 +240,8 @@ function Movie() {
             ))}
           </Select>
         </div>
-        <Button color="primary" type="submit">
-          Kirim
+        <Button color="primary" type="submit" isLoading={isLoading}>
+          Submit
         </Button>
       </form>
     </div>

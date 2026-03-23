@@ -59,10 +59,9 @@ function MovieDetail() {
       );
 
       if (result.status === 201) {
-        toast.success(
-          "Tiket berhasil dipesan! Silakan menyelesaikan pembayaran.",
-        );
+        toast.success("Ticket successfully booked! Please complete payment.");
         navigate(`/account/orders/${result.data.id}`);
+        return;
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -99,8 +98,8 @@ function MovieDetail() {
 
       toast.success(
         !isInWishlist
-          ? "Film berhasil ditambahkan ke wishlist!"
-          : "Film berhasil dihapus dari wishlist!",
+          ? "Movie successfully added to wishlist!"
+          : "Movie successfully removed from wishlist!",
       );
       setIsInWishlist((prev) => !prev);
     } catch (error) {
@@ -126,7 +125,16 @@ function MovieDetail() {
         setSchedules(data.schedules);
         setIsInWishlist(data.isInWishlist);
       } catch (error) {
-        console.error("Error fetching movie detail:", error);
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401) {
+            toast.error("Please log in to view movie details.");
+            navigate("/login");
+            return;
+          }
+
+          console.error("Server error:", error.response?.data);
+          console.error("Status code:", error.response?.status);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -218,7 +226,7 @@ function MovieDetail() {
         <div className="grid grid-cols-2 mt-6">
           {/* Left side - Movie Details */}
           <div className="pr-6 border-r border-gray-400/30">
-            <h2 className="font-bold text-4xl">Detail Film</h2>
+            <h2 className="font-bold text-4xl">Movie Details</h2>
             {isLoading ? (
               <div className="flex mt-4 gap-6">
                 <Skeleton className="w-64 h-80 rounded-lg flex-shrink-0" />
@@ -262,9 +270,9 @@ function MovieDetail() {
                     <span>4,5 (1.300)</span>
                     <span>•</span>
                     <span>
-                      {Math.floor(movieDetail.durasi / 60)} jam{" "}
+                      {Math.floor(movieDetail.durasi / 60)} hour{" "}
                       {movieDetail.durasi % 60 !== 0
-                        ? `${movieDetail.durasi % 60} menit`
+                        ? `${movieDetail.durasi % 60} minute`
                         : ""}
                     </span>
                   </div>
@@ -277,7 +285,7 @@ function MovieDetail() {
             {/* Time selection */}
             <div className="flex items-center gap-1">
               <HiMiniClock size={20} className="text-gray-600" />
-              <span>Jam Dipilih</span>
+              <span>Selected Time</span>
             </div>
             {isLoading ? (
               <div className="flex mt-2 gap-2">
@@ -332,7 +340,7 @@ function MovieDetail() {
                     </span>
                   </p>
                   <Button color="secondary" onClick={handleSubmit}>
-                    Pesan
+                    Book
                   </Button>
                 </>
               )}
@@ -425,7 +433,7 @@ function MovieDetail() {
                 <>
                   <Image src={SeatImage} width={360} alt="Seat image" />
                   <p className="text-gray-400 text-sm">
-                    Pilih jadwal untuk melihat kursi yang tersedia.
+                    Select a schedule to see available seats.
                   </p>
                 </>
               )}
