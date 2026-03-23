@@ -46,7 +46,7 @@ export default function CustomNavbar() {
       );
       if (result.status === 200) {
         setUser(null);
-        toast.success("Logout berhasil! Sampai jumpa lagi.");
+        toast.success("Logout successful! See you again.");
         navigate("/login");
         return;
       }
