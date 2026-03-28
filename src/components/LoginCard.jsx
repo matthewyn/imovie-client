@@ -5,11 +5,11 @@ import {
   HiArrowRightEndOnRectangle,
   HiMiniEnvelope,
   HiLockClosed,
-  HiMiniUser,
 } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
 import { generateApiOrigin } from "../utils/apiOrigin";
 import { useAuth } from "../contexts/AuthContext";
+import { saveToken } from "../utils/token";
 import toast from "react-hot-toast";
 
 export const EyeSlashFilledIcon = (props) => {
@@ -97,10 +97,10 @@ function LoginCard() {
         headers: {
           "Content-Type": "application/json",
         },
-        withCredentials: true,
       });
 
       if (response.status === 200) {
+        saveToken(response.data.token);
         toast.success("Login successful! Welcome back.");
         navigate("/");
         await fetchUser();

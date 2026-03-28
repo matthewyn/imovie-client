@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import { generateApiOrigin } from "../utils/apiOrigin";
+import { getAuthHeader, removeToken } from "../utils/token";
 
 const AuthContext = createContext();
 
@@ -13,7 +14,7 @@ export function AuthProvider({ children }) {
   const fetchUser = async () => {
     try {
       const response = await axios.get(urlFetch, {
-        withCredentials: true,
+        headers: getAuthHeader(),
       });
       if (response.status !== 200) {
         throw new Error("Failed to fetch user");
@@ -23,6 +24,7 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.error("Error fetching user:", error);
       setUser(null);
+      removeToken();
     } finally {
       setLoading(false);
     }

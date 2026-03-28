@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { generateApiOrigin } from "../utils/apiOrigin";
+import { getAuthHeader } from "../utils/token";
 import { Link } from "react-router-dom";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import {
@@ -39,7 +40,7 @@ function Orders() {
       setIsLoading(true);
       setSelectedStatus(ALL);
       const { data } = await axios.get(urlFetch, {
-        withCredentials: true,
+        headers: getAuthHeader(),
         params: {
           limit: 10,
           page: currentPage,
@@ -62,7 +63,7 @@ function Orders() {
       setIsLoading(true);
       setSelectedStatus(PENDING_PAYMENT);
       const { data } = await axios.get(urlFetchPending, {
-        withCredentials: true,
+        headers: getAuthHeader(),
         params: {
           limit: 10,
           page: currentPage,
@@ -85,7 +86,7 @@ function Orders() {
       setIsLoading(true);
       setSelectedStatus(CONFIRMED);
       const { data } = await axios.get(urlFetchConfirmed, {
-        withCredentials: true,
+        headers: getAuthHeader(),
         params: {
           limit: 10,
           page: currentPage,
@@ -108,7 +109,7 @@ function Orders() {
       setIsLoading(true);
       setSelectedStatus(CANCELLED);
       const { data } = await axios.get(urlFetchCancelled, {
-        withCredentials: true,
+        headers: getAuthHeader(),
         params: {
           limit: 10,
           page: currentPage,

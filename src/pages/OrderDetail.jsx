@@ -85,7 +85,7 @@ function OrderDetail() {
     try {
       setIsLoading(true);
       const { data } = await axios.get(generateApiOrigin(`/api/orders/${id}`), {
-        withCredentials: true,
+        headers: getAuthHeader(),
       });
       setOrderDetail(data);
     } catch (error) {
@@ -124,11 +124,9 @@ function OrderDetail() {
           seats: orderDetail.seats,
         },
         {
-          withCredentials: true,
-        },
-        {
           headers: {
             "Content-Type": "application/json",
+            ...getAuthHeader(),
           },
         },
       );

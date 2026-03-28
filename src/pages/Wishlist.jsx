@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { generateApiOrigin } from "../utils/apiOrigin";
 import axios from "axios";
+import { getAuthHeader } from "../utils/token";
 
 const urlFetch = generateApiOrigin("/api/wishlists");
 
@@ -21,7 +22,7 @@ function Wishlist() {
     const fetchWishlist = async () => {
       try {
         const result = await axios.get(urlFetch, {
-          withCredentials: true,
+          headers: getAuthHeader(),
         });
         setMovies(result.data);
       } catch (error) {

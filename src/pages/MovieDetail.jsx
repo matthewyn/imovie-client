@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { generateApiOrigin } from "../utils/apiOrigin";
+import { getAuthHeader } from "../utils/token";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Chip, Divider, Image, Skeleton } from "@heroui/react";
 import { HiMiniStar, HiOutlineTrash, HiPlus } from "react-icons/hi2";
@@ -54,7 +55,7 @@ function MovieDetail() {
           filePath: movieDetail.filePath,
         },
         {
-          withCredentials: true,
+          headers: getAuthHeader(),
         },
       );
 
@@ -87,11 +88,9 @@ function MovieDetail() {
           movieId: id,
         },
         {
-          withCredentials: true,
-        },
-        {
           headers: {
             "Content-Type": "application/json",
+            ...getAuthHeader(),
           },
         },
       );
@@ -118,7 +117,7 @@ function MovieDetail() {
         const { data } = await axios.get(
           generateApiOrigin(`/api/movies/${id}`),
           {
-            withCredentials: true,
+            headers: getAuthHeader(),
           },
         );
         setMovieDetail(data.movie);

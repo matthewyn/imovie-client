@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { generateApiOrigin } from "../utils/apiOrigin";
+import { removeToken } from "../utils/token";
 import toast from "react-hot-toast";
 
 export const AcmeLogo = () => {
@@ -37,14 +38,9 @@ export default function CustomNavbar() {
 
   const handleLogout = async () => {
     try {
-      const result = await axios.post(
-        urlFetch,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
+      const result = await axios.post(urlFetch, {});
       if (result.status === 200) {
+        removeToken();
         setUser(null);
         toast.success("Logout successful! See you again.");
         navigate("/login");
