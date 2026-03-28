@@ -16,6 +16,7 @@ import axios from "axios";
 import { generateApiOrigin } from "../utils/apiOrigin";
 import { removeToken } from "../utils/token";
 import toast from "react-hot-toast";
+import { getAuthHeader } from "../utils/token";
 
 export const AcmeLogo = () => {
   return (
@@ -38,7 +39,11 @@ export default function CustomNavbar() {
 
   const handleLogout = async () => {
     try {
-      const result = await axios.post(urlFetch, {});
+      const result = await axios.post(
+        urlFetch,
+        {},
+        { headers: getAuthHeader() },
+      );
       if (result.status === 200) {
         removeToken();
         setUser(null);
