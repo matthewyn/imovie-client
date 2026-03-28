@@ -17,6 +17,7 @@ import { formatDate, formatDateOnly } from "../utils/dates";
 import { statusLabels, ORDER_STEPS } from "../utils/movies";
 import toast from "react-hot-toast";
 import { DateTime } from "luxon";
+import { getAuthHeader } from "../utils/token";
 
 function mapStatusToSteps(statusHistory) {
   const statusMap = new Map(statusHistory.map((s) => [s.tipe, s.createdAt]));
