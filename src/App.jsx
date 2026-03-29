@@ -9,10 +9,14 @@ import {
   Image,
   Skeleton,
   Button,
+  Divider,
 } from "@heroui/react";
 import { Link } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { HiTicket } from "react-icons/hi2";
+import FirstFeature from "./assets/feature_1.png";
+import SecondFeature from "./assets/feature_2.png";
+import Logo from "./assets/logo.png";
 
 function StarRating({ count }) {
   return (
@@ -64,10 +68,7 @@ function Home() {
 
   return (
     <>
-      <div
-        className="relative w-full min-h-screen bg-[#080b14] overflow-hidden flex flex-col items-center justify-center px-4 py-12"
-        style={{ fontFamily: "'Libre Franklin', sans-serif" }}
-      >
+      <div className="relative w-full min-h-screen bg-[#080b14] overflow-hidden flex flex-col items-center justify-center px-4 py-12">
         {/* Ambient glow background */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-225 h-125 bg-purple-700/20 rounded-full blur-[120px]" />
@@ -238,8 +239,8 @@ function Home() {
       </div>
       <section className="mt-10">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-bold text-4xl">Now Playing</h2>
-          <div className="grid grid-cols-4 gap-4 mt-2">
+          <h2 className="font-bold text-4xl">Now Playing In Cinemas</h2>
+          <div className="grid grid-cols-4 gap-4 mt-8">
             {isLoading ? (
               Array(4)
                 .fill(0)
@@ -284,8 +285,8 @@ function Home() {
       </section>
       <section className="mt-10">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-bold text-4xl">Upcoming</h2>
-          <div className="grid grid-cols-4 gap-4 mt-2">
+          <h2 className="font-bold text-4xl">Upcoming In Cinemas</h2>
+          <div className="grid grid-cols-4 gap-4 mt-8">
             {isLoading ? (
               Array(4)
                 .fill(0)
@@ -327,6 +328,53 @@ function Home() {
               <p>Loading...</p>
             )}
           </div>
+        </div>
+      </section>
+      <section className="mt-10">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="font-bold text-4xl">Our Features</h2>
+          <div className="grid grid-cols-2 gap-4 mt-8">
+            <Image src={FirstFeature} alt="First Feature" />
+            <Image src={SecondFeature} alt="Second Feature" />
+          </div>
+          <p className="mt-12 font-bold text-2xl text-center">
+            DISCOVER THE BEST MOVIES AND ENTERTAINMENT, STAY UPDATED WITH THE
+            LATEST RELEASES, AND ENJOY EXCLUSIVE DEALS AND OFFERS!
+          </p>
+        </div>
+      </section>
+      <section className="mt-14">
+        <div className="max-w-7xl mx-auto">
+          <Card>
+            <CardBody className="p-8">
+              <div className="flex justify-between items-center">
+                <Image src={Logo} alt="iMovie Logo" width={144} />
+                <p className="text-gray-400 text-sm">
+                  Best App For Movie Lovers
+                </p>
+              </div>
+              <Divider className="my-6" />
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400 text-sm">
+                  © {new Date().getFullYear()} iMovie. All rights reserved.
+                </span>
+                <div className="flex gap-2">
+                  <Link
+                    to="/terms"
+                    className="text-gray-400 text-sm hover:underline"
+                  >
+                    Terms of Service
+                  </Link>
+                  <Link
+                    to="/privacy"
+                    className="text-gray-400 text-sm hover:underline"
+                  >
+                    Privacy Policy
+                  </Link>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
         </div>
       </section>
     </>

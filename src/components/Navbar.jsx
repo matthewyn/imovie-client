@@ -9,6 +9,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Image,
 } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -17,6 +18,7 @@ import { generateApiOrigin } from "../utils/apiOrigin";
 import { removeToken } from "../utils/token";
 import toast from "react-hot-toast";
 import { getAuthHeader } from "../utils/token";
+import Logo from "../assets/logo.png";
 
 export const AcmeLogo = () => {
   return (
@@ -63,14 +65,24 @@ export default function CustomNavbar() {
     <Navbar>
       <NavbarBrand>
         <Link to="/" className="flex items-center gap-2">
-          <AcmeLogo />
-          <p className="font-bold text-inherit">iMovie</p>
+          <Image src={Logo} alt="iMovie Logo" width={128} />
         </Link>
       </NavbarBrand>
-      <NavbarContent
-        className="hidden sm:flex gap-4"
-        justify="center"
-      ></NavbarContent>
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarItem isActive>
+          <Link color="foreground" aria-current="page" href="/">
+            Home
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link href="/">Events</Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="/">
+            News
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
       <NavbarContent justify="end">
         {user ? (
           <Dropdown placement="bottom-end">

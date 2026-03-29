@@ -280,7 +280,7 @@ function OrderDetail() {
                       orderDetail.snacks.map((snack) => (
                         <div className="flex gap-4" key={snack.name}>
                           <Image
-                            src={snack.image}
+                            src={PopcornImage}
                             width={48}
                             height={48}
                             className="rounded-lg object-cover bg-white border border-gray-400/30 p-1"
