@@ -16,7 +16,6 @@ export default function NotificationTestPanel() {
   const [body, setBody] = useState("This is a test push notification");
   const [customData, setCustomData] = useState('{"type":"test"}');
 
-  // Get initial token
   useEffect(() => {
     const token = getStoredToken();
     if (token) {
@@ -92,7 +91,7 @@ export default function NotificationTestPanel() {
         },
       );
 
-      if (response.data.success) {
+      if (response.status === 200) {
         toast.success("Test notification sent!");
       } else {
         toast.error("Failed to send notification");

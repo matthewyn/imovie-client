@@ -1,4 +1,3 @@
-// Import the Firebase scripts
 importScripts(
   "https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js",
 );
@@ -6,37 +5,57 @@ importScripts(
   "https://www.gstatic.com/firebasejs/11.0.0/firebase-messaging-compat.js",
 );
 
-// Handle incoming push messages
 self.addEventListener("push", (event) => {
+  console.log("[Service Worker] Push event received");
+
   if (!event.data) {
-    console.log("Push notification received but no data");
+    console.log("[Service Worker] No data in push event");
     return;
   }
 
   try {
     const data = event.data.json();
-    const options = {
-      body: data.notification?.body || event.data.text(),
-      icon: "/vite.svg",
-      badge: "/vite.svg",
-      tag: data.notification?.tag || "notification",
-      requireInteraction: data.notification?.requireInteraction || false,
+    console.log("[Service Worker] Push payload:", data);
+
+    const notificationTitle = data.notification?.title || "iMovie";
+    const notificationOptions = {
+      body: data.notification?.body || "",
+      icon:
+        data.notification?.icon ||
+        "https://res.cloudinary.com/dfzbnd3qk/image/upload/v1775017796/favicon_dzxsbj.png",
+      badge:
+        data.notification?.badge ||
+        "https://res.cloudinary.com/dfzbnd3qk/image/upload/v1775017796/favicon_dzxsbj.png",
+      tag: "imovie-notification",
+      requireInteraction: false,
+      actions: [],
       data: data.data || {},
+      timestamp: Date.now(),
     };
 
+    console.log(
+      "[Service Worker] Showing notification:",
+      notificationTitle,
+      notificationOptions,
+    );
+
     event.waitUntil(
-      self.registration.showNotification(
-        data.notification?.title || "iMovie Notification",
-        options,
-      ),
+      self.registration
+        .showNotification(notificationTitle, notificationOptions)
+        .then(() => {
+          console.log("[Service Worker] Notification shown successfully");
+        })
+        .catch((error) => {
+          console.error("[Service Worker] Failed to show notification:", error);
+        }),
     );
   } catch (error) {
-    console.error("Error handling push notification:", error);
+    console.error("[Service Worker] Error handling push:", error);
   }
 });
 
-// Handle notification clicks
 self.addEventListener("notificationclick", (event) => {
+  console.log("[Service Worker] Notification clicked");
   event.notification.close();
 
   const urlToOpen = event.notification.data.url || "/";
@@ -58,7 +77,6 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
-// Handle notification close
 self.addEventListener("notificationclose", (event) => {
   console.log("Notification closed:", event.notification.tag);
 });

@@ -10,7 +10,7 @@ import {
   HiPlus,
   HiTicket,
 } from "react-icons/hi2";
-import { Button, Divider, Image, Skeleton } from "@heroui/react";
+import { Button, Divider, Image, Skeleton, Textarea } from "@heroui/react";
 import PopcornImage from "../assets/popcorn.png";
 import TicketImage from "../assets/ticket.png";
 import { formatDate, formatDateOnly } from "../utils/dates";
@@ -18,6 +18,7 @@ import { statusLabels, ORDER_STEPS } from "../utils/movies";
 import toast from "react-hot-toast";
 import { DateTime } from "luxon";
 import { getAuthHeader } from "../utils/token";
+import StarRating from "../components/StarRating";
 
 function mapStatusToSteps(statusHistory) {
   const statusMap = new Map(statusHistory.map((s) => [s.tipe, s.createdAt]));
@@ -52,6 +53,8 @@ function OrderDetail() {
   const [popcornCola, setPopcornCola] = useState(0);
   const [popcornChips, setPopcornChips] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState("");
 
   const steps = orderDetail ? mapStatusToSteps(orderDetail.status) : [];
   const isCancelled = orderDetail
@@ -134,6 +137,35 @@ function OrderDetail() {
 
       if (response.status === 201) {
         toast.success("Payment successfully confirmed!");
+        fetchOrderDetail();
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Server error:", error.response?.data);
+        console.error("Status code:", error.response?.status);
+      }
+    }
+  };
+
+  const handleReviewSubmit = async () => {
+    try {
+      const response = await axios.post(
+        generateApiOrigin(`/api/reviews/${id}`),
+        {
+          idMovie: orderDetail.idMovie,
+          rating,
+          review,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            ...getAuthHeader(),
+          },
+        },
+      );
+
+      if (response.status === 201) {
+        toast.success("Review submitted successfully!");
         fetchOrderDetail();
       }
     } catch (error) {
@@ -664,6 +696,68 @@ function OrderDetail() {
               )}
             </div>
           ) : null}
+          <div className="bg-white rounded-xl border border-gray-400/30 p-6 flex flex-col gap-4">
+            {isLoading ? (
+              <>
+                <Skeleton className="w-24 h-6 rounded-lg" />
+                <div className="space-y-4">
+                  <Skeleton className="w-full h-8 rounded-lg" />
+                  <Skeleton className="w-full h-20 rounded-lg" />
+                </div>
+              </>
+            ) : !orderDetail.review &&
+              DateTime.fromMillis(orderDetail.jam) < DateTime.now() ? (
+              <>
+                <h3 className="font-semibold">Rate Your Experience</h3>
+                <StarRating
+                  count={rating}
+                  onChange={setRating}
+                  size={10}
+                  customClass="justify-center"
+                />
+                <Textarea
+                  className="max-w-xs"
+                  label="Description"
+                  placeholder="Share your feedback about the movie..."
+                  value={review}
+                  onChange={(e) => setReview(e.target.value)}
+                />
+                <Button
+                  color="secondary"
+                  className="w-full"
+                  onClick={handleReviewSubmit}
+                >
+                  Submit Review
+                </Button>
+              </>
+            ) : orderDetail.review ? (
+              <>
+                <h3 className="font-semibold">Your Review</h3>
+                <StarRating
+                  count={orderDetail.rating}
+                  onChange={() => {}}
+                  size={10}
+                  customClass="justify-center"
+                />
+                <Textarea
+                  isReadOnly
+                  className="max-w-xs"
+                  value={orderDetail.review}
+                  label="Description"
+                  labelPlacement="outside"
+                  placeholder="Enter your description"
+                  variant="bordered"
+                />
+              </>
+            ) : (
+              <>
+                <h3 className="font-semibold">Review Unavailable</h3>
+                <p className="text-gray-500">
+                  You can submit a review after watching the movie.
+                </p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

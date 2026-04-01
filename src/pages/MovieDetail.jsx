@@ -8,6 +8,7 @@ import { HiMiniStar, HiOutlineTrash, HiPlus } from "react-icons/hi2";
 import { HiMiniClock } from "react-icons/hi2";
 import SeatImage from "../assets/seat.png";
 import toast from "react-hot-toast";
+import { getStoredToken } from "../utils/fcmClient";
 
 const getRowLabel = (index) => {
   return String.fromCharCode(65 + index);
@@ -53,6 +54,7 @@ function MovieDetail() {
           judul: movieDetail.judul,
           totalPrice,
           filePath: movieDetail.filePath,
+          token: getStoredToken(),
         },
         {
           headers: getAuthHeader(),
@@ -266,7 +268,9 @@ function MovieDetail() {
                   </div>
                   <div className="flex items-center mt-2 gap-1">
                     <HiMiniStar className="text-amber-400" size={20} />
-                    <span>4,5 (1.300)</span>
+                    <span>
+                      {movieDetail.averageRating} ({movieDetail.ratingCount})
+                    </span>
                     <span>•</span>
                     <span>
                       {Math.floor(movieDetail.durasi / 60)} hour{" "}

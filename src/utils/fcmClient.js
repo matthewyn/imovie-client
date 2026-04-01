@@ -1,10 +1,6 @@
 import { messaging } from "../firebase";
 import { getToken, onMessage } from "firebase/messaging";
 
-/**
- * Request user permission for notifications and get FCM token
- * @returns {Promise<string|null>} FCM token or null if permission denied
- */
 export async function requestNotificationPermission() {
   if (!("serviceWorker" in navigator)) {
     console.log("Service Workers not supported");
@@ -12,7 +8,6 @@ export async function requestNotificationPermission() {
   }
 
   try {
-    // Check if permission is already granted
     const permission = Notification.permission;
 
     if (permission === "granted") {
@@ -24,7 +19,6 @@ export async function requestNotificationPermission() {
       return null;
     }
 
-    // Request permission (permission === 'default')
     const result = await Notification.requestPermission();
 
     if (result === "granted") {
@@ -39,10 +33,6 @@ export async function requestNotificationPermission() {
   }
 }
 
-/**
- * Get FCM token for this device
- * @returns {Promise<string|null>} FCM token or null
- */
 export async function getFCMToken() {
   try {
     if (!("serviceWorker" in navigator)) {
@@ -50,13 +40,22 @@ export async function getFCMToken() {
       return null;
     }
 
-    // Register service worker if not already registered
+    console.log("[FCM] Starting service worker registration...");
+
     const registration = await navigator.serviceWorker.register(
       "/service-worker.js",
       {
         scope: "/",
+        updateViaCache: "none",
       },
     );
+
+    console.log("[FCM] Service worker registered:", registration.scope);
+
+    await navigator.serviceWorker.ready;
+    console.log("[FCM] Service worker is ready");
+
+    registration.update();
 
     const token = await getToken(messaging, {
       serviceWorkerRegistration: registration,
@@ -64,43 +63,32 @@ export async function getFCMToken() {
     });
 
     if (token) {
-      // Store token locally
+      console.log("[FCM] Token obtained successfully");
       localStorage.setItem("FCM_TOKEN", token);
       return token;
+    } else {
+      console.error("[FCM] Failed to get token from Firebase");
     }
   } catch (error) {
-    console.error("Error getting FCM token:", error);
+    console.error("[FCM] Error getting FCM token:", error);
   }
 
   return null;
 }
 
-/**
- * Get stored FCM token from localStorage
- * @returns {string|null} Stored FCM token or null
- */
 export function getStoredToken() {
   return localStorage.getItem("FCM_TOKEN");
 }
 
-/**
- * Clear stored FCM token
- */
 export function clearStoredToken() {
   localStorage.removeItem("FCM_TOKEN");
 }
 
-/**
- * Listen for foreground messages
- * @param {Function} callback - Function to call when message received
- * @returns {Function} Unsubscribe function
- */
 export function listenForForegroundMessages(callback) {
   try {
     return onMessage(messaging, (payload) => {
       console.log("Message received in foreground:", payload);
 
-      // Show notification while app is in foreground
       if (payload.notification) {
         const { title, body } = payload.notification;
         const notification = new Notification(title || "iMovie Notification", {
@@ -110,7 +98,6 @@ export function listenForForegroundMessages(callback) {
           data: payload.data || {},
         });
 
-        // Handle notification click
         notification.onclick = () => {
           window.focus();
           if (payload.data?.url) {
@@ -119,7 +106,6 @@ export function listenForForegroundMessages(callback) {
         };
       }
 
-      // Call the callback with payload
       if (callback && typeof callback === "function") {
         callback(payload);
       }
@@ -129,24 +115,16 @@ export function listenForForegroundMessages(callback) {
   }
 }
 
-/**
- * Initialize FCM - request permissions and set up listeners
- * @param {Function} onMessageCallback - Optional callback for messages
- */
 export async function initializeFCM(onMessageCallback) {
   try {
-    // Request notification permission and get token
     const token = await requestNotificationPermission();
 
     if (token) {
       console.log("FCM Token:", token);
-      // You can send this token to your backend to store it
-      // for sending targeted notifications
     } else {
       console.log("Failed to get FCM token");
     }
 
-    // Listen for messages while app is in foreground
     if (onMessageCallback) {
       listenForForegroundMessages(onMessageCallback);
     } else {
