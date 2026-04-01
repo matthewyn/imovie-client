@@ -143,31 +143,15 @@ function Home() {
                 <div className="relative w-full aspect-video bg-linear-to-br from-gray-700 via-gray-800 to-gray-900 flex items-center justify-center">
                   <div className="absolute inset-0 bg-linear-to-t from-gray-900/90 via-transparent to-transparent" />
                   {/* Movie image */}
-                  {slide ? (
-                    <ReactPlayer
-                      src={slide.videoUrl}
-                      controls={true}
-                      style={{ width: "100%", height: "100%" }}
-                    />
-                  ) : (
-                    <svg
-                      className="w-20 h-20 text-gray-600 relative z-10"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
-                      />
-                    </svg>
-                  )}
+                  <ReactPlayer
+                    src={slide.videoUrl}
+                    controls={true}
+                    style={{ width: "100%", height: "100%" }}
+                  />
 
                   {/* Badge */}
                   <div className="absolute top-4 left-4 z-20 bg-violet-600/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                    {slide ? slide.genre : "Loading..."}
+                    {slide.genre}
                   </div>
                 </div>
 
@@ -176,14 +160,12 @@ function Home() {
                   <div className="flex items-start justify-between">
                     <div>
                       <h2 className="text-white text-3xl font-black">
-                        {slide ? slide.judul : "Loading..."}
+                        {slide.judul}
                       </h2>
                       <p className="text-sm mt-1">
                         <span className="text-gray-400">Duration: </span>
                         <span className="text-emerald-400 font-bold">
-                          {slide
-                            ? `${Math.floor(slide.durasi / 60)} hour ${slide.durasi % 60} minute`
-                            : "Loading..."}
+                          {`${Math.floor(slide.durasi / 60)} hour ${slide.durasi % 60} minute`}
                         </span>
                       </p>
                       <StarRating
@@ -232,23 +214,69 @@ function Home() {
         <div className="max-w-7xl mx-auto">
           <h2 className="font-bold text-4xl">Now Playing In Cinemas</h2>
           <div className="grid grid-cols-4 gap-4 mt-8">
-            {isLoading ? (
-              Array(4)
-                .fill(0)
-                .map((_, i) => (
-                  <Card key={`skeleton-now-${i}`} className="py-4">
-                    <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                      <Skeleton className="w-full aspect-video rounded-xl" />
-                    </CardHeader>
-                    <CardBody className="overflow-visible py-2">
-                      <Skeleton className="w-3/4 h-6 rounded-lg mb-2" />
-                      <Skeleton className="w-1/2 h-4 rounded-lg" />
-                    </CardBody>
-                  </Card>
-                ))
-            ) : nowPlayingMovies ? (
-              nowPlayingMovies.map((movie) => (
-                <Link to={`/movie/${movie.id}`} key={movie.id}>
+            {isLoading
+              ? Array(4)
+                  .fill(0)
+                  .map((_, i) => (
+                    <Card key={`skeleton-now-${i}`} className="py-4">
+                      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                        <Skeleton className="w-full aspect-video rounded-xl" />
+                      </CardHeader>
+                      <CardBody className="overflow-visible py-2">
+                        <Skeleton className="w-3/4 h-6 rounded-lg mb-2" />
+                        <Skeleton className="w-1/2 h-4 rounded-lg" />
+                      </CardBody>
+                    </Card>
+                  ))
+              : nowPlayingMovies.map((movie) => (
+                  <Link to={`/movie/${movie.id}`} key={movie.id}>
+                    <Card key={movie.id} className="py-4 h-full flex flex-col">
+                      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                        <div className="w-full aspect-2/3">
+                          <Image
+                            alt="Movie image"
+                            className="object-cover rounded-xl"
+                            src={movie.filePath}
+                            width={270}
+                            isZoomed
+                          />
+                        </div>
+                      </CardHeader>
+                      <CardBody className="overflow-visible py-2 flex flex-col grow">
+                        <h4 className="font-bold text-xl">{movie.judul}</h4>
+                        <p className="text-default-500">{movie.genre}</p>
+                        <Chip radius="sm" className="mt-2 text-violet-500">
+                          {movie.kategoriUmur}
+                        </Chip>
+                      </CardBody>
+                    </Card>
+                  </Link>
+                ))}
+          </div>
+        </div>
+      </section>
+      <section className="mt-10">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="font-bold text-4xl">Upcoming In Cinemas</h2>
+          <div className="grid grid-cols-4 gap-4 mt-8">
+            {isLoading
+              ? Array(4)
+                  .fill(0)
+                  .map((_, i) => (
+                    <Card
+                      key={`skeleton-upcoming-${i}`}
+                      className="py-4 h-full flex flex-col"
+                    >
+                      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                        <Skeleton className="w-full aspect-video rounded-xl" />
+                      </CardHeader>
+                      <CardBody className="overflow-visible py-2 flex flex-col grow">
+                        <Skeleton className="w-3/4 h-6 rounded-lg mb-2" />
+                        <Skeleton className="w-1/2 h-4 rounded-lg" />
+                      </CardBody>
+                    </Card>
+                  ))
+              : upcomingMovies.map((movie) => (
                   <Card key={movie.id} className="py-4 h-full flex flex-col">
                     <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                       <div className="w-full aspect-2/3">
@@ -264,63 +292,9 @@ function Home() {
                     <CardBody className="overflow-visible py-2 flex flex-col grow">
                       <h4 className="font-bold text-xl">{movie.judul}</h4>
                       <p className="text-default-500">{movie.genre}</p>
-                      <Chip radius="sm" className="mt-2 text-violet-500">
-                        {movie.kategoriUmur}
-                      </Chip>
                     </CardBody>
                   </Card>
-                </Link>
-              ))
-            ) : (
-              <p>Loading...</p>
-            )}
-          </div>
-        </div>
-      </section>
-      <section className="mt-10">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="font-bold text-4xl">Upcoming In Cinemas</h2>
-          <div className="grid grid-cols-4 gap-4 mt-8">
-            {isLoading ? (
-              Array(4)
-                .fill(0)
-                .map((_, i) => (
-                  <Card
-                    key={`skeleton-upcoming-${i}`}
-                    className="py-4 h-full flex flex-col"
-                  >
-                    <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                      <Skeleton className="w-full aspect-video rounded-xl" />
-                    </CardHeader>
-                    <CardBody className="overflow-visible py-2 flex flex-col grow">
-                      <Skeleton className="w-3/4 h-6 rounded-lg mb-2" />
-                      <Skeleton className="w-1/2 h-4 rounded-lg" />
-                    </CardBody>
-                  </Card>
-                ))
-            ) : upcomingMovies ? (
-              upcomingMovies.map((movie) => (
-                <Card key={movie.id} className="py-4 h-full flex flex-col">
-                  <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                    <div className="w-full aspect-2/3">
-                      <Image
-                        alt="Movie image"
-                        className="object-cover rounded-xl"
-                        src={movie.filePath}
-                        width={270}
-                        isZoomed
-                      />
-                    </div>
-                  </CardHeader>
-                  <CardBody className="overflow-visible py-2 flex flex-col grow">
-                    <h4 className="font-bold text-xl">{movie.judul}</h4>
-                    <p className="text-default-500">{movie.genre}</p>
-                  </CardBody>
-                </Card>
-              ))
-            ) : (
-              <p>Loading...</p>
-            )}
+                ))}
           </div>
         </div>
       </section>

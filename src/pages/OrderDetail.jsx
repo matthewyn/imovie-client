@@ -87,21 +87,19 @@ function OrderDetail() {
 
   const fetchOrderDetail = async () => {
     try {
-      setIsLoading(true);
       const { data } = await axios.get(generateApiOrigin(`/api/orders/${id}`), {
         headers: getAuthHeader(),
       });
       setOrderDetail(data);
     } catch (error) {
       console.error("Error fetching order detail:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleCompletePayment = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
 
       const snacksData = items
         .filter((item) => item.quantityState > 0)
@@ -137,18 +135,21 @@ function OrderDetail() {
 
       if (response.status === 201) {
         toast.success("Payment successfully confirmed!");
-        fetchOrderDetail();
+        await fetchOrderDetail();
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Server error:", error.response?.data);
         console.error("Status code:", error.response?.status);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleReviewSubmit = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.post(
         generateApiOrigin(`/api/reviews/${id}`),
         {
@@ -166,18 +167,25 @@ function OrderDetail() {
 
       if (response.status === 201) {
         toast.success("Review submitted successfully!");
-        fetchOrderDetail();
+        await fetchOrderDetail();
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Server error:", error.response?.data);
         console.error("Status code:", error.response?.status);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchOrderDetail();
+    const loadOrderDetail = async () => {
+      setIsLoading(true);
+      await fetchOrderDetail();
+      setIsLoading(false);
+    };
+    loadOrderDetail();
   }, [id]);
 
   useEffect(() => {
@@ -197,8 +205,9 @@ function OrderDetail() {
         setTimeRemaining(null);
         clearInterval(interval);
         setIsLoading(true);
-        setTimeout(() => {
-          fetchOrderDetail();
+        setTimeout(async () => {
+          await fetchOrderDetail();
+          setIsLoading(false);
         }, 2000);
       } else {
         setTimeRemaining(diff);
