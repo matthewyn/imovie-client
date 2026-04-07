@@ -19,6 +19,8 @@ import FirstFeature from "./assets/feature_1.png";
 import SecondFeature from "./assets/feature_2.png";
 import Logo from "./assets/logo.png";
 import StarRating from "./components/StarRating";
+import { Particles, initParticlesEngine } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
 
 const urlFetch = generateApiOrigin("/api/movies");
 
@@ -28,6 +30,19 @@ function Home() {
   const [upcomingMovies, setUpcomingMovies] = useState([]);
   const slide = nowPlayingMovies[active];
   const [isLoading, setIsLoading] = useState(true);
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
+  }, []);
+
+  const particlesLoaded = async (container) => {
+    console.log(container);
+  };
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -53,25 +68,38 @@ function Home() {
 
   return (
     <>
-      <div className="relative w-full min-h-screen bg-[#080b14] overflow-hidden flex flex-col items-center justify-center px-4 py-12">
+      <div
+        className="relative w-full min-h-screen overflow-hidden flex flex-col items-center justify-center px-4 py-12"
+        style={{
+          background:
+            "radial-gradient(circle at 30% 30%, #2a0a4a, #080b14 70%)",
+        }}
+      >
         {/* Ambient glow background */}
         <div className="absolute inset-0 pointer-events-none">
+          {/* Glow layers (keep yours, they are GOOD) */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-225 h-125 bg-purple-700/20 rounded-full blur-[120px]" />
           <div className="absolute bottom-10 right-10 w-75 h-75 bg-blue-600/10 rounded-full blur-[80px]" />
           <div className="absolute bottom-10 left-10 w-75 h-75 bg-pink-600/10 rounded-full blur-[80px]" />
-          {Array.from({ length: 60 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full bg-white"
-              style={{
-                width: Math.random() * 2 + 1 + "px",
-                height: Math.random() * 2 + 1 + "px",
-                top: Math.random() * 100 + "%",
-                left: Math.random() * 100 + "%",
-                opacity: Math.random() * 0.5 + 0.1,
+
+          {/* Particles canvas */}
+          {init && (
+            <Particles
+              id="tsparticles"
+              className="absolute inset-0"
+              options={{
+                fullScreen: false,
+                background: { color: "transparent" },
+                particles: {
+                  number: { value: 60 },
+                  size: { value: { min: 1, max: 2 } },
+                  move: { enable: true, speed: 0.2 },
+                  opacity: { value: { min: 0.2, max: 0.6 } },
+                  color: { value: "#ffffff" },
+                },
               }}
             />
-          ))}
+          )}
         </div>
 
         {/* Headline */}
