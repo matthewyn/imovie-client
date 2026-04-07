@@ -122,75 +122,74 @@ function LoginCard() {
 
   return (
     <>
-      <Card
+      <div
         className="max-w-100 relative z-10 p-4 rounded-2xl 
-         bg-white/30 backdrop-blur-xl shadow-xl border border-white/20"
+         bg-white/30 backdrop-blur-xl"
       >
-        <CardBody>
+        <div className="text-center">
           <Button isDisabled isIconOnly color="secondary" className="mx-auto">
             <HiArrowRightEndOnRectangle size={20} />
           </Button>
-          <h1 className="font-semibold text-2xl text-center mt-2">
-            Welcome Back
-          </h1>
-          <p className="text-gray-500 text-center mt-1">
-            Sign in to book tickets, explore movies, and manage your
-            reservations.
-          </p>
-          <form className="flex flex-col gap-3 mt-5" onSubmit={handleSubmit}>
-            <div>
-              <Input
-                isRequired
-                label="Email"
-                type="email"
-                placeholder="Email"
-                startContent={
-                  <HiMiniEnvelope size={20} className="text-gray-400" />
-                }
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <Input
-                isRequired
-                endContent={
-                  <button
-                    aria-label="toggle password visibility"
-                    className="focus:outline-solid outline-transparent"
-                    type="button"
-                    onClick={toggleVisibility}
-                  >
-                    {isVisible ? (
-                      <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                    ) : (
-                      <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                    )}
-                  </button>
-                }
-                startContent={
-                  <HiLockClosed size={20} className="text-gray-400" />
-                }
-                label="Password"
-                placeholder="Password"
-                type={isVisible ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                minLength={6}
-              />
-            </div>
-            <Link
-              className="text-right text-gray-500 text-sm"
-              to="/forgotpassword"
-            >
-              Forgot password?
-            </Link>
-            <Button color="secondary" type="submit" isLoading={isLoading}>
-              Start Booking
-            </Button>
-          </form>
-        </CardBody>
-      </Card>
+        </div>
+        <h1 className="font-semibold text-2xl text-center mt-2">
+          Welcome Back
+        </h1>
+        <p className="text-gray-500 text-center mt-1">
+          Sign in to book tickets, explore movies, and manage your reservations.
+        </p>
+        <form className="flex flex-col gap-3 mt-5" onSubmit={handleSubmit}>
+          <div>
+            <Input
+              isRequired
+              label="Email"
+              type="email"
+              placeholder="Email"
+              startContent={
+                <HiMiniEnvelope size={20} className="text-gray-400" />
+              }
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <Input
+              isRequired
+              endContent={
+                <button
+                  aria-label="toggle password visibility"
+                  className="focus:outline-solid outline-transparent"
+                  type="button"
+                  onClick={toggleVisibility}
+                >
+                  {isVisible ? (
+                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  ) : (
+                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  )}
+                </button>
+              }
+              startContent={
+                <HiLockClosed size={20} className="text-gray-400" />
+              }
+              label="Password"
+              placeholder="Password"
+              type={isVisible ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength={6}
+            />
+          </div>
+          <Link
+            className="text-right text-gray-500 text-sm"
+            to="/forgotpassword"
+          >
+            Forgot password?
+          </Link>
+          <Button color="secondary" type="submit" isLoading={isLoading}>
+            Start Booking
+          </Button>
+        </form>
+      </div>
     </>
   );
 }
