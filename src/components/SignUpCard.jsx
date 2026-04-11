@@ -10,6 +10,9 @@ import {
 import { generateApiOrigin } from "../utils/apiOrigin";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { COUNTRIES, PhoneInput } from "./PhoneInput";
+import { saveToken } from "../utils/token";
+import { useAuth } from "../contexts/AuthContext";
 
 export const EyeSlashFilledIcon = (props) => {
   return (
@@ -75,11 +78,14 @@ const urlFetch = generateApiOrigin("/api/auth/signup");
 
 function SignUpCard() {
   const [isVisible, setIsVisible] = useState(false);
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+  const [phone, setPhone] = useState("");
   const navigate = useNavigate();
+  const { fetchUser } = useAuth();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -89,9 +95,11 @@ function SignUpCard() {
       setIsLoading(true);
 
       const formData = new FormData();
-      formData.append("username", username);
+      formData.append("name", name);
       formData.append("email", email);
       formData.append("password", password);
+      formData.append("phone", phone);
+      formData.append("country", selectedCountry.name);
 
       const response = await axios.post(urlFetch, formData, {
         headers: {
@@ -100,8 +108,10 @@ function SignUpCard() {
       });
 
       if (response.status === 201) {
+        saveToken(response.data.token);
         toast.success("Account created successfully! Please log in.");
-        navigate("/login");
+        await fetchUser();
+        navigate("/");
         return;
       }
     } catch (error) {
@@ -139,12 +149,12 @@ function SignUpCard() {
           <div>
             <Input
               isRequired
-              label="Username"
+              label="Name"
               type="text"
-              placeholder="Username"
+              placeholder="Name"
               startContent={<HiMiniUser size={20} className="text-gray-400" />}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               minLength={2}
             />
           </div>
@@ -187,6 +197,14 @@ function SignUpCard() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               minLength={6}
+            />
+          </div>
+          <div>
+            <PhoneInput
+              selectedCountry={selectedCountry}
+              setSelectedCountry={setSelectedCountry}
+              phone={phone}
+              setPhone={setPhone}
             />
           </div>
           <Button color="secondary" type="submit" isLoading={isLoading}>

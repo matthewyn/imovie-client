@@ -269,7 +269,8 @@ function MovieDetail() {
                   <div className="flex items-center mt-2 gap-1">
                     <HiMiniStar className="text-amber-400" size={20} />
                     <span>
-                      {movieDetail.averageRating} ({movieDetail.ratingCount})
+                      {Math.round(movieDetail.averageRating * 10) / 10} (
+                      {movieDetail.ratingCount})
                     </span>
                     <span>•</span>
                     <span>

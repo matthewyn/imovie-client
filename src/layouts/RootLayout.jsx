@@ -11,11 +11,7 @@ export default function RootLayout() {
 
   // Initialize FCM notifications
   useFCM((payload) => {
-    console.log("Notification payload:", payload);
-    // Handle notification data here - e.g., refresh orders, update UI, etc.
     if (payload.data?.type === "order_update") {
-      // Refetch orders or update UI
-      console.log("Order updated:", payload.data);
     }
   });
 

@@ -6,16 +6,12 @@ importScripts(
 );
 
 self.addEventListener("push", (event) => {
-  console.log("[Service Worker] Push event received");
-
   if (!event.data) {
-    console.log("[Service Worker] No data in push event");
     return;
   }
 
   try {
     const data = event.data.json();
-    console.log("[Service Worker] Push payload:", data);
 
     const notificationTitle = data.notification?.title || "iMovie";
     const notificationOptions = {
@@ -33,18 +29,10 @@ self.addEventListener("push", (event) => {
       timestamp: Date.now(),
     };
 
-    console.log(
-      "[Service Worker] Showing notification:",
-      notificationTitle,
-      notificationOptions,
-    );
-
     event.waitUntil(
       self.registration
         .showNotification(notificationTitle, notificationOptions)
-        .then(() => {
-          console.log("[Service Worker] Notification shown successfully");
-        })
+        .then(() => {})
         .catch((error) => {
           console.error("[Service Worker] Failed to show notification:", error);
         }),
@@ -55,7 +43,6 @@ self.addEventListener("push", (event) => {
 });
 
 self.addEventListener("notificationclick", (event) => {
-  console.log("[Service Worker] Notification clicked");
   event.notification.close();
 
   const urlToOpen = event.notification.data.url || "/";

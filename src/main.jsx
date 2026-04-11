@@ -12,6 +12,7 @@ import Orders from "./pages/Orders.jsx";
 import OrderDetail from "./pages/OrderDetail.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import Profile from "./pages/Profile.jsx";
+import Notification from "./pages/Notification.jsx";
 import NotFound from "./components/NotFound.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "account/studio", element: <Studio /> },
       { path: "account/schedules", element: <Schedules /> },
       { path: "account/profile", element: <Profile /> },
+      { path: "account/notifications", element: <Notification /> },
       { path: "*", element: <NotFound /> },
     ],
   },

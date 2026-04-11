@@ -102,8 +102,8 @@ function LoginCard() {
       if (response.status === 200) {
         saveToken(response.data.token);
         toast.success("Login successful! Welcome back.");
-        navigate("/");
         await fetchUser();
+        navigate("/");
         return;
       }
     } catch (error) {

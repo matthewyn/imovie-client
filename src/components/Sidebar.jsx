@@ -5,6 +5,7 @@ import {
   HiOutlineFilm,
   HiOutlineClock,
   HiOutlineTableCells,
+  HiOutlineUser,
 } from "react-icons/hi2";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -19,6 +20,12 @@ const menu = [
     name: "Wishlists",
     path: "/account/wishlists",
     icon: <HiOutlineStar />,
+    restricted: false,
+  },
+  {
+    name: "Profile",
+    path: "/account/profile",
+    icon: <HiOutlineUser />,
     restricted: false,
   },
   {

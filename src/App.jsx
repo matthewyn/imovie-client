@@ -40,10 +40,6 @@ function Home() {
     });
   }, []);
 
-  const particlesLoaded = async (container) => {
-    console.log(container);
-  };
-
   useEffect(() => {
     const fetchMovies = async () => {
       try {

@@ -40,8 +40,6 @@ export async function getFCMToken() {
       return null;
     }
 
-    console.log("[FCM] Starting service worker registration...");
-
     const registration = await navigator.serviceWorker.register(
       "/service-worker.js",
       {
@@ -50,10 +48,7 @@ export async function getFCMToken() {
       },
     );
 
-    console.log("[FCM] Service worker registered:", registration.scope);
-
     await navigator.serviceWorker.ready;
-    console.log("[FCM] Service worker is ready");
 
     registration.update();
 
@@ -63,7 +58,6 @@ export async function getFCMToken() {
     });
 
     if (token) {
-      console.log("[FCM] Token obtained successfully");
       localStorage.setItem("FCM_TOKEN", token);
       return token;
     } else {
@@ -87,8 +81,6 @@ export function clearStoredToken() {
 export function listenForForegroundMessages(callback) {
   try {
     return onMessage(messaging, (payload) => {
-      console.log("Message received in foreground:", payload);
-
       if (payload.notification) {
         const { title, body } = payload.notification;
         const notification = new Notification(title || "iMovie Notification", {
@@ -120,7 +112,6 @@ export async function initializeFCM(onMessageCallback) {
     const token = await requestNotificationPermission();
 
     if (token) {
-      console.log("FCM Token:", token);
     } else {
       console.log("Failed to get FCM token");
     }
@@ -128,9 +119,7 @@ export async function initializeFCM(onMessageCallback) {
     if (onMessageCallback) {
       listenForForegroundMessages(onMessageCallback);
     } else {
-      listenForForegroundMessages((payload) => {
-        console.log("Message payload:", payload);
-      });
+      listenForForegroundMessages((payload) => {});
     }
   } catch (error) {
     console.error("Error initializing FCM:", error);

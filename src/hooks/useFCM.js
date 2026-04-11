@@ -11,8 +11,6 @@ export function useFCM(onMessageReceived) {
     const initFCM = async () => {
       try {
         const handleMessage = (payload) => {
-          console.log("Message received:", payload);
-
           // Show toast notification
           if (payload.notification) {
             toast.success(
