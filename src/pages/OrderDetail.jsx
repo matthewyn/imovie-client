@@ -222,7 +222,7 @@ function OrderDetail() {
 
   return (
     <div className="p-6">
-      <Link className="mr-4" to="/account/orders">
+      <Link className="inline-block mb-4" to="/account/orders">
         <HiChevronLeft size={24} className="text-indigo-500" />
       </Link>
       {isLoading ? (

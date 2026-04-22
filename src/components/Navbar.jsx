@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Image,
+  Badge,
 } from "@heroui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -19,6 +20,8 @@ import { removeToken } from "../utils/token";
 import toast from "react-hot-toast";
 import { getAuthHeader } from "../utils/token";
 import Logo from "../assets/logo.png";
+import { HiOutlineBell } from "react-icons/hi2";
+import Notifications from "./Notifications";
 
 export const AcmeLogo = () => {
   return (
@@ -85,37 +88,44 @@ export default function CustomNavbar() {
       </NavbarContent>
       <NavbarContent justify="end">
         {user ? (
-          <Dropdown placement="bottom-end">
-            <DropdownTrigger>
-              <Avatar
-                isBordered
-                as="button"
-                className="transition-transform"
-                color="secondary"
-                name={user.username}
-                size="sm"
-                src={user.profileUrl}
-              />
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="hello" className="h-14 gap-2">
-                <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">{user.email}</p>
-              </DropdownItem>
-              <DropdownItem key="orders">
-                <Link to="account/orders">My Orders</Link>
-              </DropdownItem>
-              <DropdownItem key="wishlist">
-                <Link to="account/wishlists">My Wishlist</Link>
-              </DropdownItem>
-              <DropdownItem key="profile">
-                <Link to="account/profile">My Profile</Link>
-              </DropdownItem>
-              <DropdownItem key="logout" color="danger" onClick={handleLogout}>
-                Log Out
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <>
+            <Notifications />
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Avatar
+                  isBordered
+                  as="button"
+                  className="transition-transform"
+                  color="secondary"
+                  name={user.username}
+                  size="sm"
+                  src={user.profileUrl}
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem key="header-profile" className="h-14 gap-2">
+                  <p className="font-semibold">Signed in as</p>
+                  <p className="font-semibold">{user.email}</p>
+                </DropdownItem>
+                <DropdownItem key="orders">
+                  <Link to="account/orders">My Orders</Link>
+                </DropdownItem>
+                <DropdownItem key="wishlist">
+                  <Link to="account/wishlists">My Wishlist</Link>
+                </DropdownItem>
+                <DropdownItem key="profile">
+                  <Link to="account/profile">My Profile</Link>
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  color="danger"
+                  onClick={handleLogout}
+                >
+                  Log Out
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </>
         ) : (
           <>
             <NavbarItem className="hidden lg:flex">

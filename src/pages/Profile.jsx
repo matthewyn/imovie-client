@@ -40,8 +40,6 @@ function Profile() {
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
 
-  console.log(bio);
-
   useEffect(() => {
     if (user) {
       setName(user.name);

@@ -3,6 +3,7 @@ import IconImage from "/favicon.png";
 import { Image } from "@heroui/react";
 import io from "socket.io-client";
 import Markdown from "react-markdown";
+import { useAuth } from "../contexts/AuthContext";
 
 const socket =
   process.env.NODE_ENV === "development"
@@ -22,11 +23,12 @@ function LiveChat() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const { user } = useAuth();
   const replyIdx = useRef(0);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  console.log(messages);
+  console.log(user);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -68,6 +70,30 @@ function LiveChat() {
       );
     });
 
+    socket.on("agent_usage_limit", () => {
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "agent",
+          text: "Sorry, you've reached the usage limit for this session. Please try again tomorrow.",
+          id: crypto.randomUUID(),
+        },
+      ]);
+    });
+
+    socket.on("assistant_message_error", (data) => {
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "agent",
+          text: data.message,
+          id: crypto.randomUUID(),
+        },
+      ]);
+    });
+
     socket.on("assistant_message_complete", () => {
       setIsTyping(false);
     });
@@ -75,6 +101,7 @@ function LiveChat() {
     return () => {
       socket.off("assistant_message");
       socket.off("assistant_message_complete");
+      socket.off("agent_usage_limit");
     };
   }, [socket]);
 
@@ -87,7 +114,11 @@ function LiveChat() {
     ]);
     setInputValue("");
     setIsTyping(true);
-    socket.emit("client_message", { text: val, history: messages });
+    socket.emit("client_message", {
+      text: val,
+      history: messages,
+      userId: user.userId,
+    });
   };
 
   const handleKey = (e) => {
@@ -95,7 +126,7 @@ function LiveChat() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 w-fit pointer-events-none">
       {/* Chat Panel */}
       <div
         className={`
@@ -263,7 +294,7 @@ function LiveChat() {
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="w-20 h-20 rounded-small flex flex-col items-center justify-center gap-1.5 hover:scale-105 active:scale-95 transition-transform shadow-2xl shadow-purple-900/40 border border-white/10 bg-gray-900"
+        className="w-20 h-20 rounded-small flex flex-col items-center justify-center gap-1.5 hover:scale-105 active:scale-95 transition-transform shadow-2xl shadow-purple-900/40 border border-white/10 bg-gray-900 pointer-events-auto"
       >
         {isOpen ? (
           <svg
