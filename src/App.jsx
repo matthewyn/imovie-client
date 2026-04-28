@@ -270,7 +270,7 @@ function Home() {
                         <h4 className="font-bold text-xl">{movie.judul}</h4>
                         <p className="text-default-500">{movie.genre}</p>
                         <Chip radius="sm" className="mt-2 text-violet-500">
-                          {movie.kategoriUmur}
+                          {movie.kategoriUmur.toUpperCase()}
                         </Chip>
                       </CardBody>
                     </Card>
