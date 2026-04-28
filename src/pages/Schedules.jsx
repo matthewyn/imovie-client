@@ -95,7 +95,7 @@ function Schedules() {
             onSelectionChange={(e) => setKategoriMovie(Array.from(e)[0])}
           >
             {nowPlayingMovies.map((movie) => (
-              <SelectItem key={movie.id}>{movie.judul}</SelectItem>
+              <SelectItem key={movie._id}>{movie.judul}</SelectItem>
             ))}
           </Select>
         </div>
@@ -127,7 +127,7 @@ function Schedules() {
             onSelectionChange={(e) => setKategoriStudio(Array.from(e)[0])}
           >
             {studios.map((studio) => (
-              <SelectItem key={studio.id}>{studio.nama}</SelectItem>
+              <SelectItem key={studio._id}>{studio.nama}</SelectItem>
             ))}
           </Select>
         </div>

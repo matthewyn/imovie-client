@@ -2,6 +2,8 @@ import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import { generateApiOrigin } from "../utils/apiOrigin";
 import { getAuthHeader, removeToken } from "../utils/token";
+import io from "socket.io-client";
+import socket from "../utils/socket";
 
 const AuthContext = createContext();
 
@@ -33,6 +35,11 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    socket.emit("join", user.userId);
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{ user, loading, setUser, fetchUser }}>

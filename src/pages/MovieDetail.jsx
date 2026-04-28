@@ -9,6 +9,7 @@ import { HiMiniClock } from "react-icons/hi2";
 import SeatImage from "../assets/seat.png";
 import toast from "react-hot-toast";
 import { getStoredToken } from "../utils/fcmClient";
+import { DateTime } from "luxon";
 
 const getRowLabel = (index) => {
   return String.fromCharCode(65 + index);
@@ -46,7 +47,7 @@ function MovieDetail() {
       const result = await axios.post(
         urlFetch,
         {
-          idMovie: id,
+          movieId: id,
           selectedTime,
           scheduleId: selectedSchedule.id,
           seats: selectedSeats,
@@ -160,7 +161,8 @@ function MovieDetail() {
   }, [selectedDay, selectedTime]);
 
   schedules.forEach((s) => {
-    const date = new Date(s.score);
+    const date = new Date(s.waktu);
+    const millis = DateTime.fromJSDate(date).toMillis();
 
     const dayKey = date.toLocaleDateString("en-US", {
       weekday: "short",
@@ -175,9 +177,9 @@ function MovieDetail() {
     if (!grouped[dayKey]) grouped[dayKey] = [];
 
     grouped[dayKey].push({
-      id: s.value,
+      id: s._id,
       time: timeLabel,
-      raw: s.score,
+      raw: millis,
     });
   });
 
@@ -269,7 +271,7 @@ function MovieDetail() {
                   <div className="flex items-center mt-2 gap-1">
                     <HiMiniStar className="text-amber-400" size={20} />
                     <span>
-                      {Math.round(movieDetail.averageRating * 10) / 10} (
+                      {Math.round(movieDetail.rating * 10) / 10} (
                       {movieDetail.ratingCount})
                     </span>
                     <span>•</span>

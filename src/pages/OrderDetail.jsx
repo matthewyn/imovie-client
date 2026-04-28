@@ -10,6 +10,7 @@ import {
   HiPlus,
   HiTicket,
 } from "react-icons/hi2";
+import socket from "../utils/socket";
 import { Button, Divider, Image, Skeleton, Textarea } from "@heroui/react";
 import PopcornImage from "../assets/popcorn.png";
 import TicketImage from "../assets/ticket.png";
@@ -122,7 +123,8 @@ function OrderDetail() {
           selectedTime: orderDetail.jam,
           snacks: snacksData,
           totalPrice,
-          idMovie: orderDetail.idMovie,
+          movieId: orderDetail.movieId,
+          judul: orderDetail.judul,
           seats: orderDetail.seats,
         },
         {
@@ -153,7 +155,7 @@ function OrderDetail() {
       const response = await axios.post(
         generateApiOrigin(`/api/reviews/${id}`),
         {
-          idMovie: orderDetail.idMovie,
+          movieId: orderDetail.movieId,
           rating,
           review,
         },
@@ -180,6 +182,18 @@ function OrderDetail() {
   };
 
   useEffect(() => {
+    socket.on("reservation_expired", async (data) => {
+      console.log("Processing reservation expired");
+      await fetchOrderDetail();
+      setIsLoading(false);
+    });
+
+    return () => {
+      socket.off("reservation_expired");
+    };
+  }, [socket]);
+
+  useEffect(() => {
     const loadOrderDetail = async () => {
       setIsLoading(true);
       await fetchOrderDetail();
@@ -198,17 +212,13 @@ function OrderDetail() {
 
     const updateCountdown = () => {
       const now = DateTime.now();
-      const deadline = DateTime.fromMillis(orderDetail.paymentDeadline);
+      const deadline = DateTime.fromISO(orderDetail.paymentDeadline);
       const diff = deadline.diff(now, ["hours", "minutes", "seconds"]);
 
       if (diff.hours < 0 || diff.minutes < 0 || diff.seconds < 0) {
         setTimeRemaining(null);
         clearInterval(interval);
         setIsLoading(true);
-        setTimeout(async () => {
-          await fetchOrderDetail();
-          setIsLoading(false);
-        }, 2000);
       } else {
         setTimeRemaining(diff);
       }
@@ -402,7 +412,7 @@ function OrderDetail() {
                   <Button
                     className="bg-lime-400 text-black px-4 py-2 rounded-full text-sm font-semibold hover:scale-105 transition"
                     as={Link}
-                    to={`/movie/${orderDetail.idMovie}`}
+                    to={`/movie/${orderDetail.movieId}`}
                   >
                     Create New Order
                   </Button>
@@ -715,7 +725,7 @@ function OrderDetail() {
                 </div>
               </>
             ) : !orderDetail.review &&
-              DateTime.fromMillis(orderDetail.jam) < DateTime.now() ? (
+              DateTime.fromISO(orderDetail.jam) < DateTime.now() ? (
               <>
                 <h3 className="font-semibold">Rate Your Experience</h3>
                 <StarRating

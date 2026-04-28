@@ -24,6 +24,7 @@ import axios from "axios";
 const badgeMapping = {
   "order-created": <HiCheckBadge size={24} className="text-green-500" />,
   "order-cancelled": <HiMiniXCircle size={24} className="text-red-500" />,
+  "order-confirmed": <HiCheckBadge size={24} className="text-green-500" />,
 };
 
 const urlFetch = generateApiOrigin("/api/notifications");

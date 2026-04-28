@@ -222,7 +222,7 @@ function Orders() {
                       </p>
                       <p>Rp. {order.totalPrice.toLocaleString("id-ID")}</p>
                     </div>
-                    <Link className="mr-4" to={`${order.id}`}>
+                    <Link className="mr-4" to={`${order._id}`}>
                       <HiChevronRight size={24} className="text-indigo-500" />
                     </Link>
                   </div>

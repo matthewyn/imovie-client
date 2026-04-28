@@ -253,8 +253,8 @@ function Home() {
                     </Card>
                   ))
               : nowPlayingMovies.map((movie) => (
-                  <Link to={`/movie/${movie.id}`} key={movie.id}>
-                    <Card key={movie.id} className="py-4 h-full flex flex-col">
+                  <Link to={`/movie/${movie._id}`} key={movie._id}>
+                    <Card key={movie._id} className="py-4 h-full flex flex-col">
                       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                         <div className="w-full aspect-2/3">
                           <Image

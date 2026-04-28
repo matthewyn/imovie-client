@@ -28,8 +28,6 @@ function LiveChat() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  console.log(user);
-
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -94,6 +92,18 @@ function LiveChat() {
       ]);
     });
 
+    socket.on("user_not_allowed", (data) => {
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "agent",
+          text: data.message,
+          id: crypto.randomUUID(),
+        },
+      ]);
+    });
+
     socket.on("assistant_message_complete", () => {
       setIsTyping(false);
     });
@@ -114,10 +124,22 @@ function LiveChat() {
     ]);
     setInputValue("");
     setIsTyping(true);
+    if (!user) {
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "agent",
+          text: "Please log in to use the chat feature.",
+          id: crypto.randomUUID(),
+        },
+      ]);
+      return;
+    }
     socket.emit("client_message", {
       text: val,
       history: messages,
-      userId: user.userId,
+      user: user,
     });
   };
 
